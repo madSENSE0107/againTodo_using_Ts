@@ -1,24 +1,33 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { FC, useState } from 'react';
 import './App.css';
+import { Itask } from './Interface/Interfaces';
+import TodoList from './Components/TodoList';
 
-function App() {
+const App :FC =()=> {
+  const [task,setTask]=useState<string>("")
+  const [taskList,setTaskList]=useState<Itask[]>([])
+  const addTask=():void=>{
+    const newTask={taskName:task};
+    setTaskList([...taskList,newTask])
+  }
+  const deleteTask=(taskNameToDelete:string):void=>{
+    setTaskList(
+      taskList.filter((task)=>{return task.taskName!==taskNameToDelete})
+    )
+  }
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      Welcome to againTasks
+      <div>
+        <input type="text" onChange={(e)=>setTask(e.target.value)} placeholder='Enter the task'/>
+        <button onClick={addTask}>Enter</button>
+      </div>
+      <div>
+        <span>Todolist</span>
+        {taskList.map((task:Itask,key:number)=>{
+          return <TodoList key={key} task={task} deleteTask={deleteTask}/>
+        })}
+      </div>
     </div>
   );
 }
